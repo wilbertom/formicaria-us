@@ -6,7 +6,7 @@ db = client['ant_farm']
 school_of_data = db['school_of_data']
 
 def save_all():
-    map(school_of_data.insert, map(soa_api.details, soa_api.lat_lons()))
+    map(school_of_data.insert, soa_api.get_all())
 
 if __name__ == '__main__':
 

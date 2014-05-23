@@ -1,4 +1,6 @@
 import requests
+from toolz import keyfilter
+
 
 WEBSITE = 'http://schoolofants.org/'
 BASE = WEBSITE + 'gather_locations/%s'
@@ -16,9 +18,18 @@ def lat_lons():
 
 def details(lat_lon):
     """
-    Gives more details about a lat_lon from the lat_lons function
-    """
-    return requests.post(DETAILS, data=lat_lon).json()
+    Gives more details about a lat_lon from the lat_lons function.
 
+    """
+    return {'location': lat_lon,
+            # we remove the events field because it contains some user's name
+            'data': keyfilter(lambda k: k != 'events', requests.post(DETAILS, data=lat_lon).json())}
+
+def get_all():
+    """
+    Returns a list filled with all the data.
+
+    """
+    return map(details, lat_lons())
 
 
